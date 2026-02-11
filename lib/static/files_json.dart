@@ -276,11 +276,11 @@ class AppColors {
 }
 ''',
   // HomeController file
-  'lib/presentation/home/controllers/home_controller.dart': '''
+  'lib/modules/home/notifiers/home_notifier.dart': '''
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeController extends StateNotifier<int> {
-  HomeController() : super(0){
+class HomeNotifier extends StateNotifier<int> {
+  HomeNotifier() : super(0){
   onInit();
   }
 
@@ -296,10 +296,10 @@ class HomeController extends StateNotifier<int> {
 ''',
 
   // Updated HomeView file
-  'lib/presentation/home/views/home_view.dart': '''
+  'lib/modules/home/views/home_view.dart': '''
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../bindings/home_binding.dart';
+import '../providers/home_provider.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -315,10 +315,10 @@ class HomeView extends StatelessWidget {
             // Counter display
             Consumer(
               builder: (context, ref, _) {
-                final counter = ref.watch(homeControllerProvider);
+                final counter = ref.watch(homeNotifierProvider);
                 return Text(
                   'Counter: \$counter',
-                  style: Theme.of(context).textTheme.headlineMedium,
+            
                 );
               },
             ),
@@ -329,9 +329,9 @@ class HomeView extends StatelessWidget {
               children: [
                 Consumer(
                   builder: (context, ref, _) {
-                    final controller = ref.read(homeControllerProvider.notifier);
+                    final notifier = ref.read(homeNotifierProvider.notifier);
                     return ElevatedButton(
-                      onPressed: controller.decrement,
+                      onPressed: notifier.decrement,
                       child: const Text('-'),
                     );
                   },
@@ -339,9 +339,9 @@ class HomeView extends StatelessWidget {
                 const SizedBox(width: 16),
                 Consumer(
                   builder: (context, ref, _) {
-                    final controller = ref.read(homeControllerProvider.notifier);
+                    final notifier = ref.read(homeNotifierProvider.notifier);
                     return ElevatedButton(
-                      onPressed: controller.increment,
+                      onPressed: notifier.increment,
                       child: const Text('+'),
                     );
                   },
@@ -356,13 +356,13 @@ class HomeView extends StatelessWidget {
 }
 ''',
 
-  // HomeBinding file
-  'lib/presentation/home/bindings/home_binding.dart': '''
+  // Homeprovider file
+  'lib/modules/home/providers/home_provider.dart': '''
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../controllers/home_controller.dart';
+import '../notifiers/home_notifier.dart';
 
-final homeControllerProvider = StateNotifierProvider<HomeController, int>((ref) {
-  return HomeController();
+final homeNotifierProvider = StateNotifierProvider<HomeNotifier, int>((ref) {
+  return HomeNotifier();
 });
 ''',
 
@@ -377,7 +377,7 @@ class AppRoutes {
   'lib/app/routes/route_page.dart': '''
 import 'package:go_router/go_router.dart';
 import 'app_routes.dart';
-import '../../presentation/home/views/home_view.dart';
+import '../../modules/home/views/home_view.dart';
 
 final GoRouter router = GoRouter(
   initialLocation: AppRoutes.home,

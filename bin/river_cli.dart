@@ -32,7 +32,7 @@ void main(List<String> arguments) {
     }
 
     // Check for optional --path argument
-    String path = 'lib/presentation';
+    String path = 'lib/modules';
     final pathIndex = arguments.indexOf('--path');
     if (pathIndex != -1 && arguments.length > pathIndex + 1) {
       path = arguments[pathIndex + 1];
