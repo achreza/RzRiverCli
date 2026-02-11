@@ -74,7 +74,7 @@ final GoRouter router = GoRouter(
 
   void createPage(String pageName, String path, String routesPath,
       List<dynamic> arguments) {
-  final className = _capitalize(_toCamelCase(pageName));
+    final className = _capitalize(_toCamelCase(pageName));
     final basePath = '$path/$pageName';
 
     print('Creating page: $pageName at path: $basePath');
@@ -82,24 +82,24 @@ final GoRouter router = GoRouter(
     // Define folder structure
     final folders = [
       basePath,
-      '$basePath/controllers',
+      '$basePath/notifiers',
       '$basePath/views',
-      '$basePath/bindings',
+      '$basePath/providers',
     ];
 
     // Define initial files to generate
     final files = {
-      '$basePath/controllers/${pageName}_controller.dart': '''
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+      '$basePath/notifiers/${pageName}_notifier.dart': '''
+import 'package:flutter_riverpod/legacy.dart';
 
-class ${className}Controller extends StateNotifier<int> {
-  ${className}Controller() : super(0){
+class ${className}Notifier extends StateNotifier<int> {
+  ${className}Notifier() : super(0){
   onInit();
   }
 
   void onInit() {
     // Perform initialization logic here
-    print('Controller initialized');
+    print('Notifier initialized');
   }
 
   // Increment the counter
@@ -112,8 +112,8 @@ class ${className}Controller extends StateNotifier<int> {
 ''',
       '$basePath/views/${pageName}_view.dart': '''
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../bindings/${pageName}_binding.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import '../providers/${pageName}_provider.dart';
 
 class ${className}View extends StatelessWidget {
   const ${className}View({super.key});
@@ -129,10 +129,10 @@ class ${className}View extends StatelessWidget {
             // Counter display
             Consumer(
               builder: (context, ref, _) {
-                final counter = ref.watch(${pageName}ControllerProvider);
+                final counter = ref.watch(${pageName}NotifiersProvider);
                 return Text(
                   'Counter: \$counter',
-                  style: Theme.of(context).textTheme.headline4,
+            
                 );
               },
             ),
@@ -143,9 +143,9 @@ class ${className}View extends StatelessWidget {
               children: [
                 Consumer(
                   builder: (context, ref, _) {
-                    final controller = ref.read(${pageName}ControllerProvider.notifier);
+                    final notifiers = ref.read(${pageName}NotifiersProvider.notifier);
                     return ElevatedButton(
-                      onPressed: controller.decrement,
+                      onPressed: notifiers.decrement,
                       child: const Text('-'),
                     );
                   },
@@ -153,9 +153,9 @@ class ${className}View extends StatelessWidget {
                 const SizedBox(width: 16),
                 Consumer(
                   builder: (context, ref, _) {
-                    final controller = ref.read(${pageName}ControllerProvider.notifier);
+                    final notifiers = ref.read(${pageName}NotifiersProvider.notifier);
                     return ElevatedButton(
-                      onPressed: controller.increment,
+                      onPressed: notifiers.increment,
                       child: const Text('+'),
                     );
                   },
@@ -169,14 +169,14 @@ class ${className}View extends StatelessWidget {
   }
 }
 ''',
-      '$basePath/bindings/${pageName}_binding.dart': '''
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../controllers/${pageName}_controller.dart';
+      '$basePath/providers/${pageName}_binding.dart': '''
+import 'package:flutter_riverpod/legacy.dart';
+import '../notifiers/${pageName}_notifier.dart';
 
 /// StateNotifierProvider for $className
-final ${pageName}ControllerProvider =
-    StateNotifierProvider<${className}Controller, int>((ref) {
-  return ${className}Controller();
+final ${pageName}NotifiersProvider =
+    StateNotifierProvider<${className}Notifier, int>((ref) {
+  return ${className}Notifier();
 });
 ''',
     };
@@ -208,7 +208,7 @@ final ${pageName}ControllerProvider =
       String pageName, String routesPath, List<dynamic> arguments) {
     final appRoutesFile = File('$routesPath/app_routes.dart');
     final routePageFile = File('$routesPath/route_page.dart');
-  final className = _capitalize(_toCamelCase(pageName));
+    final className = _capitalize(_toCamelCase(pageName));
 
     // Update app_routes.dart
     final appRoutesContent = appRoutesFile.readAsStringSync();
@@ -257,7 +257,8 @@ final ${pageName}ControllerProvider =
     if (input.isEmpty) return input;
     return input
         .split('_')
-        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+        .map((word) =>
+            word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
         .join();
   }
 }

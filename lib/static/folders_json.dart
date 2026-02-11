@@ -9,8 +9,8 @@ final folders = [
   'lib/data/provider',
   'lib/data/provider/network',
   'lib/data/repositories',
-  'lib/presentation/home/controllers',
-  'lib/presentation/home/views',
-  'lib/presentation/home/bindings',
+  'lib/modules/home/notifiers',
+  'lib/modules/home/views',
+  'lib/modules/home/providers',
   'lib/app/routes',
 ];
