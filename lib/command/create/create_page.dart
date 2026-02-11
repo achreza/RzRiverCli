@@ -112,7 +112,7 @@ class ${className}Notifier extends StateNotifier<int> {
 ''',
       '$basePath/views/${pageName}_view.dart': '''
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/${pageName}_provider.dart';
 
 class ${className}View extends StatelessWidget {
@@ -169,7 +169,7 @@ class ${className}View extends StatelessWidget {
   }
 }
 ''',
-      '$basePath/providers/${pageName}_binding.dart': '''
+      '$basePath/providers/${pageName}_provider.dart': '''
 import 'package:flutter_riverpod/legacy.dart';
 import '../notifiers/${pageName}_notifier.dart';
 
@@ -218,7 +218,7 @@ final ${pageName}NotifiersProvider =
     );
     appRoutesFile.writeAsStringSync(updatedAppRoutes);
     print('Updated app_routes.dart with $pageName route.');
-    String pathName = "presentation";
+    String pathName = "modules";
     if (arguments.length > 3) {
       pathName = arguments[3].split('/').last;
     }
