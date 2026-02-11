@@ -19,7 +19,7 @@ A command-line tool to automate the creation of a feature structure in a Flutter
 Ensure you have Dart and Flutter installed. Navigate to the project folder and run:
 
 ```bash
-dart pub global activate river_cli
+dart pub global activate --source git https://github.com/doclocumpenawar-ops/doclocum-app.git main
 ```
 
 
